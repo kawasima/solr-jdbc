@@ -1,0 +1,15 @@
+<elevate>
+
+    <query text="AAA">
+        <doc id="A" />
+        <doc id="B" />
+    </query>
+
+    <query text="ipod">
+        <doc id="A" />
+
+        <!-- you can optionally exclude documents from a query result -->
+        <doc id="B" exclude="true" />
+    </query>
+
+</elevate>
