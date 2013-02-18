@@ -53,19 +53,20 @@
 			</plugin>
 			<plugin>
 				<artifactId>maven-source-plugin</artifactId>
-                <version>2.3.2</version>
+                <version>2.2.1</version>
 				<executions>
 					<execution>
 						<id>source-jar</id>
 						<phase>package</phase>
 						<goals>
-							<goal>jar</goal>
+							<goal>jar-no-fork</goal>
 						</goals>
 					</execution>
 				</executions>
 			</plugin>
 			<plugin>
 				<artifactId>maven-shade-plugin</artifactId>
+                <version>2.0</version>
 				<configuration>
 					<outputFile>target/solr-jdbc-full.jar</outputFile>
 				</configuration>

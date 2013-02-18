@@ -1,14 +1,14 @@
 package net.unit8.solr.jdbc.value;
 
+import net.unit8.solr.jdbc.message.DbException;
+import net.unit8.solr.jdbc.message.ErrorCode;
+
 import java.math.BigDecimal;
 import java.sql.Array;
 import java.sql.Date;
 import java.sql.Types;
 import java.util.ArrayList;
 import java.util.HashMap;
-
-import net.unit8.solr.jdbc.message.DbException;
-import net.unit8.solr.jdbc.message.ErrorCode;
 
 /**
  * Mapping solr types to sql types, vice-versa
@@ -31,15 +31,15 @@ public class DataType {
 		}
  		add(SolrType.NULL, Types.NULL, "Null", new String[]{"NULL"});
  		add(SolrType.BOOLEAN, Types.BOOLEAN, "Boolean", new String[]{"BOOLEAN", "BIT", "BOOL", "TINYINT"});
- 		add(SolrType.INT, Types.INTEGER, "Int", new String[]{"INTEGER", "INT"});
- 		add(SolrType.LONG, Types.BIGINT, "Long", new String[]{"BIGINT", "LONG"});
+ 		add(SolrType.INT, Types.INTEGER, "Int", new String[]{"INT", "INTEGER"});
+ 		add(SolrType.LONG, Types.BIGINT, "Long", new String[]{"LONG", "BIGINT"});
  		add(SolrType.DECIMAL, Types.NUMERIC, "BigDecimal", new String[]{"NUMERIC","NUMBER"});
  		add(SolrType.DOUBLE, Types.DOUBLE, "Double", new String[]{"DOUBLE"});
  		add(SolrType.FLOAT, Types.FLOAT, "Float", new String[]{"FLOAT"});
  		add(SolrType.STRING, Types.VARCHAR, "String", new String[]{"VARCHAR", "VARCHAR2", "NVARCHAR", "NVARCHAR2", "VARCHAR_CASESENSITIVE", "CHARACTER VARYING", "TID"});
  		add(SolrType.TEXT, Types.CLOB, "Clob", new String[]{"CLOB", "TEXT"});
  		add(SolrType.DATE, Types.DATE, "Date", new String[]{"DATE"});
- 		add(SolrType.ARRAY, Types.ARRAY, "Array", new String[]{"ARRAY"});
+ 		add(SolrType.ARRAY, Types.ARRAY, "Array", new String[]{"ARRAY", "VARCHAR_ARRAY", "DATE_ARRAY", "INT_ARRAY", "BIGINT_ARRAY"});
 	}
 
 	private static void add(SolrType type, int sqlType, String jdbc, String[] names) {

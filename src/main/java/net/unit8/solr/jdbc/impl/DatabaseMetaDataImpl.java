@@ -1,27 +1,18 @@
 package net.unit8.solr.jdbc.impl;
 
-import java.sql.Connection;
-import java.sql.DatabaseMetaData;
-import java.sql.ResultSet;
-import java.sql.RowIdLifetime;
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.regex.Pattern;
-
+import net.unit8.solr.jdbc.expression.ColumnExpression;
+import net.unit8.solr.jdbc.expression.Expression;
+import net.unit8.solr.jdbc.message.DbException;
+import net.unit8.solr.jdbc.message.ErrorCode;
+import net.unit8.solr.jdbc.value.DataType;
 import org.apache.commons.lang.StringUtils;
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.response.QueryResponse;
 import org.apache.solr.common.SolrDocument;
 
-import net.unit8.solr.jdbc.expression.Expression;
-import net.unit8.solr.jdbc.expression.ColumnExpression;
-import net.unit8.solr.jdbc.message.DbException;
-import net.unit8.solr.jdbc.message.ErrorCode;
-import net.unit8.solr.jdbc.value.DataType;
+import java.sql.*;
+import java.util.*;
+import java.util.regex.Pattern;
 
 public class DatabaseMetaDataImpl implements DatabaseMetaData {
 	private final SolrConnection conn;
@@ -224,7 +215,7 @@ public class DatabaseMetaDataImpl implements DatabaseMetaData {
 			columnMeta[3] = column.getColumnName(); // COLUMN_NAME
 
 			columnMeta[4] = DataType.getDataType(column.getType()).sqlType; // DATA_TYPE
-			columnMeta[5] = DataType.getDataType(column.getType()).jdbc; // TYPE_NAME
+			columnMeta[5] = column.getTypeName(); // TYPE_NAME
 			columnMeta[6] = 0; // COLUMN_SIZE
 			columnMeta[8] = 0; // DECIMAL_DIGITS
 			columnMeta[10] = DatabaseMetaData.columnNullableUnknown; // NULLABLE
@@ -631,6 +622,8 @@ public class DatabaseMetaDataImpl implements DatabaseMetaData {
 		if (tableColumns == null) {
 			buildMetadata();
 		}
+        if (tableNamePattern == null)
+            tableNamePattern = "%";
 
 		CollectionResultSet rs;
 		String[] columns = { "TABLE_CAT", "TABLE_SCHEM", "TABLE_NAME",

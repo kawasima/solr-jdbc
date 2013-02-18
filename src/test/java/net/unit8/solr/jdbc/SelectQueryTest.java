@@ -1,20 +1,12 @@
 package net.unit8.solr.jdbc;
 
-import java.sql.Connection;
-import java.sql.Date;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-
-import net.unit8.solr.jdbc.SolrDriver;
+import net.unit8.solr.jdbc.message.ErrorCode;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import net.unit8.solr.jdbc.message.ErrorCode;
+import java.sql.*;
 
 import static org.junit.Assert.*;
 
@@ -23,7 +15,7 @@ public class SelectQueryTest {
 
 	@Before
 	public void setUp() throws Exception {
-		conn = DriverManager.getConnection("jdbc:solr:s");
+		conn = DriverManager.getConnection("jdbc:solr:s;SOLR_HOME=src/test/resources");
 	}
 
 	@After

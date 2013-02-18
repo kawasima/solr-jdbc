@@ -13,7 +13,12 @@ public class ValueBoolean extends SolrValue {
 	public static ValueBoolean get(boolean b) {
 		return (ValueBoolean) (b ? TRUE : FALSE);
 	}
-	
+
+    @Override
+    public Boolean getBoolean() {
+        return value;
+    }
+
 	@Override
 	public SolrType getType() {
 		return SolrType.BOOLEAN;

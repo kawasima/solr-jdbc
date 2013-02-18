@@ -1,10 +1,10 @@
 package net.unit8.solr.jdbc.expression;
 
-import java.sql.ResultSetMetaData;
-
+import net.unit8.solr.jdbc.value.DataType;
+import net.unit8.solr.jdbc.value.SolrType;
 import org.apache.commons.lang.StringUtils;
 
-import net.unit8.solr.jdbc.value.SolrType;
+import java.sql.ResultSetMetaData;
 
 public abstract class Expression {
 	protected SolrType type;
@@ -74,6 +74,11 @@ public abstract class Expression {
 	public String getSchemaName() {
 		return null;
 	}
+
+    public String getTypeName() {
+
+        return (originalType == null) ? type.name() : DataType.getDataType(originalType).name + "_ARRAY";
+    }
 
 	@Override
 	public String toString() {

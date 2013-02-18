@@ -19,7 +19,7 @@ public class MultiValueTest {
 	public void setUp() throws Exception{
 		Class.forName(SolrDriver.class.getName());
 
-		conn = DriverManager.getConnection("jdbc:solr:s");
+		conn = DriverManager.getConnection("jdbc:solr:s;SOLR_HOME=src/test/resources");
 		PreparedStatement dropStmt = conn.prepareStatement("DROP TABLE books");
 		try {
 			dropStmt.executeUpdate();
@@ -30,6 +30,12 @@ public class MultiValueTest {
 				"CREATE TABLE books (title varchar(50), author varchar(50) ARRAY )");
 		stmt.executeUpdate();
 
+        DatabaseMetaData metaData = conn.getMetaData();
+        ResultSet rs = metaData.getColumns(null, null, "books", "%");
+        while(rs.next()) {
+            System.out.println(rs.getString("COLUMN_NAME") + ":" +
+                    rs.getString("TYPE_NAME"));
+        }
 		PreparedStatement insStmt = conn.prepareStatement("INSERT INTO books Values (?,?)");
 		insStmt.setString(1, "バカの壁");
 		insStmt.setObject(2, new String[]{"養老孟司"});

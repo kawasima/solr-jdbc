@@ -1,22 +1,21 @@
 package net.unit8.solr.jdbc.command;
 
-import java.io.IOException;
-import java.sql.SQLException;
-import java.util.UUID;
-
 import net.sf.jsqlparser.statement.create.table.ColumnDefinition;
 import net.sf.jsqlparser.statement.create.table.CreateTable;
-
-import org.apache.solr.client.solrj.SolrQuery;
-import org.apache.solr.client.solrj.SolrServerException;
-import org.apache.solr.client.solrj.response.QueryResponse;
-import org.apache.solr.common.SolrInputDocument;
-
 import net.unit8.solr.jdbc.ColumnSpec;
 import net.unit8.solr.jdbc.impl.AbstractResultSet;
 import net.unit8.solr.jdbc.message.DbException;
 import net.unit8.solr.jdbc.message.ErrorCode;
 import net.unit8.solr.jdbc.value.DataType;
+import org.apache.solr.client.solrj.SolrQuery;
+import org.apache.solr.client.solrj.SolrServerException;
+import org.apache.solr.client.solrj.response.QueryResponse;
+import org.apache.solr.common.SolrInputDocument;
+
+import java.io.IOException;
+import java.sql.SQLException;
+import java.sql.Types;
+import java.util.UUID;
 
 
 public class CreateTableCommand extends Command{
@@ -62,13 +61,17 @@ public class CreateTableCommand extends Command{
 			ColumnDefinition columnDef = (ColumnDefinition)elm;
 			String sqlTypeName = columnDef.getColDataType().getDataType();
 			ColumnSpec spec = new ColumnSpec(columnDef.getColumnSpecStrings());
+            DataType dt = DataType.getTypeByName(sqlTypeName);
+            if (dt == null)
+                throw DbException.get(ErrorCode.UNKNOWN_DATA_TYPE, sqlTypeName);
 			if (spec.isArray()) {
-				DataType dt = DataType.getTypeByName(sqlTypeName);
 				doc.addField("meta.columns", columnDef.getColumnName()+".M_"+dt.type.name());
-			} else {
-				DataType dt = DataType.getTypeByName(sqlTypeName);
-				if (dt == null)
-					throw DbException.get(ErrorCode.UNKNOWN_DATA_TYPE, sqlTypeName);
+			} else if (dt.sqlType == Types.ARRAY) {
+                DataType originalType = DataType.getTypeByName(dt.name.replace("_ARRAY$", ""));
+                if (originalType == null)
+                    throw DbException.get(ErrorCode.UNKNOWN_DATA_TYPE, sqlTypeName);
+                doc.addField("meta.columns", columnDef.getColumnName() + ".M_" + originalType.type.name());
+            } else {
 				doc.addField("meta.columns", columnDef.getColumnName()+"."+dt.type.name());
 			}
 		}
