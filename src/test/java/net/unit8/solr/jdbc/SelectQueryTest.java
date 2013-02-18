@@ -178,7 +178,8 @@ public class SelectQueryTest {
 			assertEquals("player_name", rs.getMetaData().getColumnLabel(1));
 			assertEquals("衣笠祥雄", rs.getString("player_name"));
 		} finally {
-			stmt.close();
+            if (stmt != null)
+                stmt.close();
 		}
 	}
 
@@ -199,8 +200,10 @@ public class SelectQueryTest {
 			e.printStackTrace();
 			fail("SQLException:" + e.getMessage());
 		} finally {
-			stmt.close();
-		}
+            if (stmt != null) {
+                stmt.close();
+            }
+        }
 	}
 
 	private void verifyPreparedStatement(String selectQuery, Object[] params, Object[][] expected)

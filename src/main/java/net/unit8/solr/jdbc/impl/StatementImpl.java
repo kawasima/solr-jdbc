@@ -46,18 +46,17 @@ public class StatementImpl implements Statement {
 	}
 
 	private Command parseSQL(String sql) throws SQLException {
-		Command command = null;
-		CCJSqlParserManager pm = new CCJSqlParserManager();
 		try {
+            Command command = null;
+            CCJSqlParserManager pm = new CCJSqlParserManager();
 			net.sf.jsqlparser.statement.Statement statement = pm.parse(new StringReader(sql));
 			command = CommandFactory.getCommand(statement);
 			command.setConnection(conn);
 			command.parse();
-		} catch (JSQLParserException ex) {
+            return command;
+        } catch (JSQLParserException ex) {
 			throw DbException.get(ErrorCode.SYNTAX_ERROR, ex, ex.getMessage()).getSQLException();
 		}
-		return command;
-
 	}
 
 	@Override
@@ -386,7 +385,6 @@ public class StatementImpl implements Statement {
 	}
 
 	protected SQLException logAndConvert(Exception ex) {
-		SQLException e = DbException.toSQLException(ex);
-		return e;
+		return DbException.toSQLException(ex);
 	}
 }

@@ -1196,7 +1196,7 @@ public class DatabaseMetaDataImpl implements DatabaseMetaData {
 	/**
 	 * Returns whether multiple transactions are supported.
 	 *
-	 * @false
+	 * @return false
 	 */
 	@Override
 	public boolean supportsMultipleTransactions() throws SQLException {
@@ -1477,7 +1477,7 @@ public class DatabaseMetaDataImpl implements DatabaseMetaData {
 	/**
 	 * Returns whether a specific transaction isolation level.
 	 *
-	 * @retunr true, if level is TRANSACTION_READ_COMMITTED
+	 * @return true, if level is TRANSACTION_READ_COMMITTED
 	 */
 	@Override
 	public boolean supportsTransactionIsolationLevel(int level)

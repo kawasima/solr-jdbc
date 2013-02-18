@@ -15,6 +15,7 @@ public class ColumnSpec {
 			if (specElement.equals("ARRAY")) {
 				isArray = true;
 			}
+
 		}
 	}
 	

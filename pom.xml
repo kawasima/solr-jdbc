@@ -66,7 +66,6 @@
 			</plugin>
 			<plugin>
 				<artifactId>maven-shade-plugin</artifactId>
-                <version>2.0</version>
 				<configuration>
 					<outputFile>target/solr-jdbc-full.jar</outputFile>
 				</configuration>
@@ -83,12 +82,10 @@
 		</plugins>
 		<pluginManagement>
 			<plugins>
-				<plugin>
-					<artifactId>maven-eclipse-plugin</artifactId>
-					<configuration>
-						<wtpversion>1.5</wtpversion>
-					</configuration>
-				</plugin>
+                <plugin>
+                    <artifactId>maven-shade-plugin</artifactId>
+                    <version>2.0</version>
+                </plugin>
 			</plugins>
 		</pluginManagement>
 	</build>
@@ -140,6 +137,7 @@
         	<groupId>org.slf4j</groupId>
         	<artifactId>slf4j-api</artifactId>
         	<version>1.6.0</version>
+            <scope>test</scope>
         </dependency>
         <dependency>
 			<groupId>org.slf4j</groupId>

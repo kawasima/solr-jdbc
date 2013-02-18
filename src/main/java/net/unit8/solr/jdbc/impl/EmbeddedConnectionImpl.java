@@ -12,23 +12,22 @@ import java.util.Properties;
 
 
 public class EmbeddedConnectionImpl extends SolrConnection {
-	private CoreContainer coreContainer;
+	private final CoreContainer coreContainer;
 	private int timeout = 0;
 
-	private static Properties defaults;
+	private static final Properties defaults;
 	static {
 		defaults = new Properties();
 		defaults.put("DATA_DIR", "target/solrdata");
 		defaults.put("SOLR_HOME", "target/test-classes");
 	}
 
-	private Properties options = new Properties(defaults);
-
-	public EmbeddedConnectionImpl(String serverUrl)
+    public EmbeddedConnectionImpl(String serverUrl)
 			throws ParserConfigurationException, IOException, SAXException {
 		super(serverUrl);
 		String[] tokens = serverUrl.split(";");
-		if(tokens != null && tokens.length > 1) {
+        Properties options = new Properties(defaults);
+        if(tokens != null && tokens.length > 1) {
 			tokens = (String[])ArrayUtils.remove(tokens, 0);
 			for (String token : tokens) {
 				String[] params = token.split("=", 2);

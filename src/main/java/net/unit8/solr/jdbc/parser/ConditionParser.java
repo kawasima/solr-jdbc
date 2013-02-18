@@ -68,7 +68,7 @@ public class ConditionParser implements ExpressionVisitor {
 	private String likeEscapeChar;
 	private ParseContext context = ParseContext.NONE;
 	private Expression currentColumn = null;
-	private static Pattern pattern = Pattern.compile("\\?(\\d+)");
+	private static final Pattern pattern = Pattern.compile("\\?(\\d+)");
 
 	public ConditionParser(DatabaseMetaDataImpl metaData) {
 		this.metaData = metaData;

@@ -27,15 +27,14 @@ import java.util.List;
  * @author kawasima
  */
 public class PreparedStatementImpl extends StatementImpl implements PreparedStatement {
-	private Statement statement;
-	private List<SolrValue[]> batchParameters;
+    private List<SolrValue[]> batchParameters;
 	private Command command;
 
 	protected PreparedStatementImpl(SolrConnection conn, String sql, int resultSetType, int resultSetConcurrency) throws SQLException {
 		super(conn, resultSetType, resultSetConcurrency);
 		CCJSqlParserManager pm = new CCJSqlParserManager();
 		try {
-			statement = pm.parse(new StringReader(sql));
+            Statement statement = pm.parse(new StringReader(sql));
 			this.command = CommandFactory.getCommand(statement);
 			command.setConnection(conn);
 			command.parse();

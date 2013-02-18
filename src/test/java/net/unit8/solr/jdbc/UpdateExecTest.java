@@ -221,8 +221,10 @@ public class UpdateExecTest {
 	
 			setUpConn.commit();
 		} finally {
-			setUpConn.close();
-		}
+            if (setUpConn != null) {
+                setUpConn.close();
+            }
+        }
 	}
 
 }

@@ -14,8 +14,7 @@ public class ValueString extends SolrValue{
 		if(s.length() == 0) {
 			return EMPTY;
 		}
-		ValueString obj = new ValueString(s);
-		return obj;
+		return new ValueString(s);
 	}
 
 	/**

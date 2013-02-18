@@ -16,8 +16,8 @@ import net.unit8.solr.jdbc.message.DbException;
 import net.unit8.solr.jdbc.message.ErrorCode;
 
 public class ItemListParser implements ItemsListVisitor{
-	private List<Parameter> parameters;
-	private List<Item> itemList;
+	private final List<Parameter> parameters;
+	private final List<Item> itemList;
 
 	public ItemListParser() {
 		this.itemList = new ArrayList<Item>();

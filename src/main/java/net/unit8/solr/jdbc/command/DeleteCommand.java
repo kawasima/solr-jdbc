@@ -19,9 +19,8 @@ import net.unit8.solr.jdbc.parser.ConditionParser;
 public class DeleteCommand extends Command {
 	private final Delete delStmt;
 	private ConditionParser conditionParser;
-	private String tableName;
 
-	public DeleteCommand(Delete stmt) {
+    public DeleteCommand(Delete stmt) {
 		this.parameters = new ArrayList<Parameter>();
 		this.delStmt = stmt;
 	}
@@ -34,7 +33,7 @@ public class DeleteCommand extends Command {
 	@Override
 	public int executeUpdate() {
 		String queryString;
-		long num = 0;
+		long num;
 		if(conditionParser == null) {
 			// select all records if there is no WHERE clause.
 			queryString = "id:@"+delStmt.getTable().getName()+".*";
@@ -73,14 +72,14 @@ public class DeleteCommand extends Command {
 	public void parse() {
 		DatabaseMetaDataImpl metaData= this.conn.getMetaDataImpl();
 
-		tableName = delStmt.getTable().getName();
+        String tableName = delStmt.getTable().getName();
 		if(!metaData.hasTable(tableName))
 			throw DbException.get(ErrorCode.TABLE_OR_VIEW_NOT_FOUND, tableName);
 		tableName = metaData.getOriginalTableName(tableName);
 
 		// Where句の解析
 		if(delStmt.getWhere() != null) {
-			conditionParser = new ConditionParser((DatabaseMetaDataImpl)metaData);
+			conditionParser = new ConditionParser(metaData);
 			conditionParser.setTableName(tableName);
 			delStmt.getWhere().accept(conditionParser);
 			parameters = conditionParser.getParameters();
