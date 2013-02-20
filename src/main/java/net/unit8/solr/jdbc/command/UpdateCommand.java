@@ -93,7 +93,7 @@ public class UpdateCommand extends Command {
 			conn.getSolrServer().deleteByQuery(query.getQuery());
 			conn.getSolrServer().add(inDocs);
 		} catch (Exception e) {
-			throw DbException.get(ErrorCode.IO_EXCEPTION, e);
+			throw DbException.get(ErrorCode.IO_EXCEPTION, e, e.getLocalizedMessage());
 		}
 
 		return inDocs.size();

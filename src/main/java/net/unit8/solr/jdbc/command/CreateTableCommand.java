@@ -2,11 +2,13 @@ package net.unit8.solr.jdbc.command;
 
 import net.sf.jsqlparser.statement.create.table.ColumnDefinition;
 import net.sf.jsqlparser.statement.create.table.CreateTable;
+import net.sf.jsqlparser.statement.create.table.Index;
 import net.unit8.solr.jdbc.ColumnSpec;
 import net.unit8.solr.jdbc.impl.AbstractResultSet;
 import net.unit8.solr.jdbc.message.DbException;
 import net.unit8.solr.jdbc.message.ErrorCode;
 import net.unit8.solr.jdbc.value.DataType;
+import org.apache.commons.lang.StringUtils;
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.response.QueryResponse;
@@ -57,8 +59,8 @@ public class CreateTableCommand extends Command{
 		SolrInputDocument doc = new SolrInputDocument();
 		doc.setField("meta.name", createTable.getTable().getName());
 
-		for(Object elm : createTable.getColumnDefinitions()) {
-			ColumnDefinition columnDef = (ColumnDefinition)elm;
+		for (Object el : createTable.getColumnDefinitions()) {
+			ColumnDefinition columnDef = (ColumnDefinition) el;
 			String sqlTypeName = columnDef.getColDataType().getDataType();
 			ColumnSpec spec = new ColumnSpec(columnDef.getColumnSpecStrings());
             DataType dt = DataType.getTypeByName(sqlTypeName);
@@ -75,6 +77,17 @@ public class CreateTableCommand extends Command{
 				doc.addField("meta.columns", columnDef.getColumnName()+"."+dt.type.name());
 			}
 		}
+
+        if (createTable.getIndexes() != null) {
+            for (Object el: createTable.getIndexes()) {
+                Index index = (Index) el;
+                if (StringUtils.equalsIgnoreCase(index.getType(), "PRIMARY KEY")) {
+                    for (Object columnName : index.getColumnsNames()) {
+                        doc.addField("meta.primaryKeys", columnName.toString());
+                    }
+                }
+            }
+        }
 		doc.setField("id", UUID.randomUUID().toString());
 		try {
 			conn.getSolrServer().add(doc);

@@ -16,8 +16,9 @@ import java.util.regex.Pattern;
 
 public class DatabaseMetaDataImpl implements DatabaseMetaData {
 	private final SolrConnection conn;
-	private Map<String, List<Expression>> tableColumns;
-	private Map<String, String> originalTables;
+	private Map<String, List<Expression>> tableColumns = new HashMap<String, List<Expression>>();
+    private Map<String, List<String>> tablePrimaryKeys  = new HashMap<String, List<String>>();
+	private Map<String, String> originalTables = new HashMap<String, String>();
 
 	public DatabaseMetaDataImpl(SolrConnection conn) {
 		this.conn = conn;
@@ -25,8 +26,6 @@ public class DatabaseMetaDataImpl implements DatabaseMetaData {
 	}
 
 	private void buildMetadata() {
-		this.originalTables = new HashMap<String, String>();
-		this.tableColumns = new HashMap<String, List<Expression>>();
 		try {
 			QueryResponse res = this.conn.getSolrServer().query(
 					new SolrQuery("meta.name:[A TO z]"));
@@ -38,12 +37,20 @@ public class DatabaseMetaDataImpl implements DatabaseMetaData {
 					columns.add(new ColumnExpression(tableName + "."
 							+ cols.toString()));
 				}
+                List<String> primaryKeys = new ArrayList<String>();
+                Collection<Object> pkColumns = doc.getFieldValues("meta.primaryKeys");
+                if (pkColumns != null) {
+                    for (Object pkColumn : pkColumns) {
+                        primaryKeys.add(tableName + "." + pkColumn.toString());
+                    }
+                }
 				tableColumns.put(StringUtils.upperCase(tableName), columns);
+                tablePrimaryKeys.put(StringUtils.upperCase(tableName), primaryKeys);
 				originalTables.put(StringUtils.upperCase(tableName), tableName);
 			}
 
 		} catch (Exception e) {
-			throw DbException.get(ErrorCode.IO_EXCEPTION, e);
+			throw DbException.get(ErrorCode.IO_EXCEPTION, e, e.getLocalizedMessage());
 		}
 	}
 
@@ -498,18 +505,17 @@ public class DatabaseMetaDataImpl implements DatabaseMetaData {
 		rs = new CollectionResultSet();
 		rs.setColumns(Arrays.asList(columns));
 
-		//TODO PKをセットする
-		/*
-		for (Expression column : tableColumns.get(table)) {
+
+        short keySeq = 0;
+		for (String primaryKey : tablePrimaryKeys.get(StringUtils.upperCase(table))) {
+            String[] pkTokens = StringUtils.split(primaryKey, ".", 2);
 			Object[] columnMeta = new Object[6];
-			columnMeta[2] = column.getTableName();
-			columnMeta[3] = column.getColumnName(); //COLUMN_NAME
-			columnMeta[4] = DataType.getDataType(column.getType()).sqlType; //KEY_SEQ
-			columnMeta[5] = DataType.getDataType(column.getType()).jdbc; // PK_NAME
+			columnMeta[2] = pkTokens[0];
+			columnMeta[3] = pkTokens[1]; //COLUMN_NAME
+			columnMeta[4] = keySeq++; //KEY_SEQ
+			columnMeta[5] = null; // PK_NAME
 			rs.add(Arrays.asList(columnMeta));
 		}
-		*/
-
 		return rs;
 	}
 

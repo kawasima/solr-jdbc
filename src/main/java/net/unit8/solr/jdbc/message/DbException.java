@@ -50,7 +50,10 @@ public class DbException extends RuntimeException {
 	private static SQLException getSQLException(int errorCode, Throwable cause, String ... params) {
 		String sqlstate = ErrorCode.getState(errorCode);
 		String message = translate(sqlstate, params);
-		return new SQLException(message, sqlstate, errorCode);
+		SQLException sqlException = new SQLException(message, sqlstate, errorCode);
+        if (cause != null)
+            sqlException.setStackTrace(cause.getStackTrace());
+        return sqlException;
 	}
 
     public static SQLException toSQLException(Exception e) {

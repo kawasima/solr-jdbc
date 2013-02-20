@@ -65,6 +65,7 @@
         <field name="id" type="string" indexed="true" stored="true" required="true" multiValued="false"/>
         <field name="meta.name" type="string" indexed="true" stored="true"/>
         <field name="meta.columns" type="string" indexed="true" stored="true" multiValued="true"/>
+        <field name="meta.primaryKeys" type="string" indexed="true" stored="true" multiValued="true"/>
         <field name="_version_" type="long" indexed="true" stored="true" multiValued="false"/>
 
         <!-- String -->
