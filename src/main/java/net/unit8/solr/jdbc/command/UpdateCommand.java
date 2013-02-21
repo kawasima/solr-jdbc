@@ -73,11 +73,11 @@ public class UpdateCommand extends Command {
 			SolrDocument doc = iter.next();
 			SolrInputDocument inDoc = new SolrInputDocument();
 
-			int columnIndex = 0;
 			for(String fieldName : doc.getFieldNames()) {
 				// UPDATEのSET句に含まれるカラムは、その値をセットする
 				if (solrColumnNames.containsKey(fieldName)) {
-					SolrDocumentUtil.setValue(inDoc, fieldName, setItemList.get(columnIndex++).getValue());
+                    int columnOrder = solrColumnNames.get(fieldName);
+					SolrDocumentUtil.setValue(inDoc, fieldName, setItemList.get(columnOrder).getValue());
 				} else if (StringUtils.equals(fieldName, "_version_")) {
                     inDoc.removeField("_version_");
                 }
@@ -90,7 +90,6 @@ public class UpdateCommand extends Command {
 		}
 
 		try {
-			conn.getSolrServer().deleteByQuery(query.getQuery());
 			conn.getSolrServer().add(inDocs);
 		} catch (Exception e) {
 			throw DbException.get(ErrorCode.IO_EXCEPTION, e, e.getLocalizedMessage());
@@ -131,9 +130,10 @@ public class UpdateCommand extends Command {
 		updStmt.getWhere().accept(conditionParser);
 		parameters = conditionParser.getParameters();
 
+        int columnOrder = 0;
 		for(Column column : (List<Column>)updStmt.getColumns()) {
 			net.unit8.solr.jdbc.expression.Expression solrColumn =((DatabaseMetaDataImpl)metaData).getSolrColumn(tableName, column.getColumnName());
-			solrColumnNames.put(solrColumn.getSolrColumnName(), 1);
+			solrColumnNames.put(solrColumn.getSolrColumnName(), columnOrder++);
 		}
 
 	}

@@ -162,7 +162,7 @@ public class UpdateExecTest {
 		Class.forName(SolrDriver.class.getName());
 
 		try {
-			setUpConn = DriverManager.getConnection("jdbc:solr:s");
+			setUpConn = DriverManager.getConnection("jdbc:solr:s;SOLR_HOME=src/test/resources");
 			PreparedStatement dropStmt = setUpConn.prepareStatement("DROP TABLE player");
 			try {
 				dropStmt.executeUpdate();

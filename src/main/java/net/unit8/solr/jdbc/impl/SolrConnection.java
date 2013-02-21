@@ -49,7 +49,7 @@ public abstract class SolrConnection implements Connection {
 	public void commit() throws SQLException {
 		try {
 			if(updatedInTx)
-				solrServer.commit(true, true);
+				solrServer.commit(true, true, true);
 		} catch (Exception e) {
 			throw new SQLException(e);
 		} finally {
