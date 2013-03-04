@@ -1,11 +1,11 @@
 package net.unit8.solr.jdbc.command;
 
 import net.sf.jsqlparser.statement.drop.Drop;
-
 import net.unit8.solr.jdbc.impl.AbstractResultSet;
 import net.unit8.solr.jdbc.impl.DatabaseMetaDataImpl;
 import net.unit8.solr.jdbc.message.DbException;
 import net.unit8.solr.jdbc.message.ErrorCode;
+import org.apache.solr.client.solrj.response.UpdateResponse;
 
 
 public class DropCommand extends Command {
@@ -38,9 +38,12 @@ public class DropCommand extends Command {
 			throw DbException.get(ErrorCode.TABLE_OR_VIEW_NOT_FOUND, tableName);
 		tableName = metaData.getOriginalTableName(tableName);
 		try {
-			conn.getSolrServer().deleteByQuery(
+			UpdateResponse response = conn.getSolrServer().deleteByQuery(
 					"meta.name:" + tableName + " OR id:@" + tableName + ".*");
+            if (response.getStatus() != 0)
+                throw DbException.get(ErrorCode.GENERAL_ERROR, "Solr Server status is " + response.getStatus());
 			conn.setUpdatedInTx(true);
+            conn.setSoftCommit(false);
 			conn.commit();
 			conn.refreshMetaData();
 		} catch(Exception e) {

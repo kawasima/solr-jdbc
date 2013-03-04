@@ -91,7 +91,9 @@ public class PreparedStatementImpl extends StatementImpl implements PreparedStat
 	public ResultSet executeQuery() throws SQLException {
 		checkClosed();
 		try {
-			resultSet = command.executeQuery();
+            if (conn.isUpdatedInTx())
+                throw DbException.get(ErrorCode.FEATURE_NOT_SUPPORTED, "Query after updated. You must commit first.");
+            resultSet = command.executeQuery();
 
 			return resultSet;
 		} catch (DbException e) {

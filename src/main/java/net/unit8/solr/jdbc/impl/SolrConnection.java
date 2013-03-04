@@ -3,7 +3,10 @@ package net.unit8.solr.jdbc.impl;
 import net.unit8.solr.jdbc.message.DbException;
 import net.unit8.solr.jdbc.message.ErrorCode;
 import org.apache.solr.client.solrj.SolrServer;
+import org.apache.solr.client.solrj.SolrServerException;
+import org.apache.solr.client.solrj.response.UpdateResponse;
 
+import java.io.IOException;
 import java.sql.*;
 import java.util.Map;
 import java.util.Properties;
@@ -24,6 +27,7 @@ public abstract class SolrConnection implements Connection {
 	protected Statement executingStatement;
 
 	private boolean updatedInTx = false;
+    private boolean softCommit = true;
 
 	protected SolrConnection(String serverUrl) {
 
@@ -48,12 +52,18 @@ public abstract class SolrConnection implements Connection {
 	@Override
 	public void commit() throws SQLException {
 		try {
-			if(updatedInTx)
-				solrServer.commit(true, true, true);
-		} catch (Exception e) {
+			if(updatedInTx) {
+				UpdateResponse response = solrServer.commit(true, true, softCommit);
+                if (response.getStatus() != 0)
+                    throw DbException.get(ErrorCode.GENERAL_ERROR, "");
+            }
+		} catch (SolrServerException e) {
 			throw new SQLException(e);
+        } catch (IOException e) {
+            throw DbException.get(ErrorCode.IO_EXCEPTION, e);
 		} finally {
 			updatedInTx = false;
+            softCommit = true;
 		}
 	}
 
@@ -371,9 +381,17 @@ public abstract class SolrConnection implements Connection {
 				.getSQLException();
 	}
 
+    public boolean isUpdatedInTx() {
+        return updatedInTx;
+    }
+
 	public void setUpdatedInTx(boolean updateInTx) {
 		this.updatedInTx = updateInTx;
 	}
+
+    public void setSoftCommit(boolean softCommit) {
+        this.softCommit = softCommit;
+    }
 
 	public abstract void setQueryTimeout(int second);
 

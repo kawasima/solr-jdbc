@@ -24,6 +24,7 @@ public class MultiValueTest {
 		try {
 			dropStmt.executeUpdate();
 		} catch(Exception ignore) {
+            ignore.printStackTrace();
 		}
 
 		PreparedStatement stmt = conn.prepareStatement(

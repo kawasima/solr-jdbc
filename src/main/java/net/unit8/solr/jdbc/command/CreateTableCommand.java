@@ -92,7 +92,8 @@ public class CreateTableCommand extends Command{
 		try {
 			conn.getSolrServer().add(doc);
 			conn.setUpdatedInTx(true);
-			conn.commit();
+            conn.setSoftCommit(false);
+            conn.commit();
 			conn.refreshMetaData();
 		} catch (SolrServerException e) {
 			throw DbException.get(ErrorCode.GENERAL_ERROR, e, "Solr Server Error");
