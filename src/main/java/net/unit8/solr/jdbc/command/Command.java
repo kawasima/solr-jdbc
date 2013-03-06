@@ -1,14 +1,15 @@
 package net.unit8.solr.jdbc.command;
 
-import java.util.List;
-
 import net.unit8.solr.jdbc.expression.Parameter;
 import net.unit8.solr.jdbc.impl.AbstractResultSet;
 import net.unit8.solr.jdbc.impl.SolrConnection;
 
+import java.io.Serializable;
+import java.util.List;
 
-public abstract class Command {
-	protected SolrConnection conn;
+
+public abstract class Command implements Serializable {
+	protected transient SolrConnection conn;
 	protected List<Parameter> parameters;
 
 	public abstract AbstractResultSet executeQuery();

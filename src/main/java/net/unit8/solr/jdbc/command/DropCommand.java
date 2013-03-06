@@ -9,7 +9,7 @@ import org.apache.solr.client.solrj.response.UpdateResponse;
 
 
 public class DropCommand extends Command {
-	private Drop statement;
+	private transient final Drop statement;
 
 	protected DropCommand(Drop statement) {
 		this.statement = statement;

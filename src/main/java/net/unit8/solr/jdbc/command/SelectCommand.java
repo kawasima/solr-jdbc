@@ -1,15 +1,6 @@
 package net.unit8.solr.jdbc.command;
 
-import java.util.ArrayList;
-import java.util.Map;
-
 import net.sf.jsqlparser.statement.select.Select;
-
-import org.apache.commons.lang.StringUtils;
-import org.apache.solr.client.solrj.SolrQuery;
-import org.apache.solr.client.solrj.SolrServerException;
-import org.apache.solr.client.solrj.response.QueryResponse;
-
 import net.unit8.solr.jdbc.expression.Expression;
 import net.unit8.solr.jdbc.expression.FunctionExpression;
 import net.unit8.solr.jdbc.expression.Parameter;
@@ -20,10 +11,17 @@ import net.unit8.solr.jdbc.impl.FacetResultSetImpl;
 import net.unit8.solr.jdbc.message.DbException;
 import net.unit8.solr.jdbc.message.ErrorCode;
 import net.unit8.solr.jdbc.parser.SelectParser;
+import org.apache.commons.lang.StringUtils;
+import org.apache.solr.client.solrj.SolrQuery;
+import org.apache.solr.client.solrj.SolrServerException;
+import org.apache.solr.client.solrj.response.QueryResponse;
+
+import java.util.ArrayList;
+import java.util.Map;
 
 
 public class SelectCommand extends Command {
-	private final Select select;
+	private transient final Select select;
 	private SelectParser selectParser;
 
 	public SelectCommand(Select statement) {

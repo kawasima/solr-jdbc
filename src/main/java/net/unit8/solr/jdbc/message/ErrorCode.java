@@ -19,6 +19,7 @@ public class ErrorCode {
 	public static final int OBJECT_CLOSED = 90007;
 	public static final int INVALID_VALUE = 90008;
 	public static final int IO_EXCEPTION = 90028;
+    public static final int URL_FORMAT_ERROR_2 = 90046;
 	public static final int EXCEPTION_IN_FUNCTION = 90105;
 	public static final int OUT_OF_MEMORY = 90108;
 	public static final int METHOD_NOT_ALLOWED_FOR_PREPARED_STATEMENT = 90130;

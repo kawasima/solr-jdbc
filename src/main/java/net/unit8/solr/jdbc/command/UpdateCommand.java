@@ -26,7 +26,7 @@ import java.util.*;
 
 
 public class UpdateCommand extends Command {
-	private final Update updStmt;
+	private transient final Update updStmt;
 	private ConditionParser conditionParser;
 	private List<Item> setItemList;
 

@@ -1,14 +1,7 @@
 package net.unit8.solr.jdbc.command;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
-
 import net.sf.jsqlparser.schema.Column;
 import net.sf.jsqlparser.statement.insert.Insert;
-
-import org.apache.solr.common.SolrInputDocument;
-
 import net.unit8.solr.jdbc.expression.Expression;
 import net.unit8.solr.jdbc.expression.Item;
 import net.unit8.solr.jdbc.expression.Parameter;
@@ -18,10 +11,15 @@ import net.unit8.solr.jdbc.message.DbException;
 import net.unit8.solr.jdbc.message.ErrorCode;
 import net.unit8.solr.jdbc.parser.ItemListParser;
 import net.unit8.solr.jdbc.util.SolrDocumentUtil;
+import org.apache.solr.common.SolrInputDocument;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
 
 public class InsertCommand extends Command {
 
-	private final Insert insStmt;
+	private transient final Insert insStmt;
 	private List<Item> itemList;
 
 	public InsertCommand(Insert stmt) {

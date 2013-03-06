@@ -21,7 +21,7 @@ import java.util.UUID;
 
 
 public class CreateTableCommand extends Command{
-	private final CreateTable createTable;
+	private transient final CreateTable createTable;
 
 	public CreateTableCommand(CreateTable statement) {
 		this.createTable = statement;

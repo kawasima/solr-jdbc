@@ -1,23 +1,21 @@
 package net.unit8.solr.jdbc.command;
 
-import java.io.IOException;
-import java.util.ArrayList;
-
 import net.sf.jsqlparser.statement.delete.Delete;
-
-import org.apache.solr.client.solrj.SolrQuery;
-import org.apache.solr.client.solrj.SolrServerException;
-import org.apache.solr.client.solrj.response.QueryResponse;
-
 import net.unit8.solr.jdbc.expression.Parameter;
 import net.unit8.solr.jdbc.impl.AbstractResultSet;
 import net.unit8.solr.jdbc.impl.DatabaseMetaDataImpl;
 import net.unit8.solr.jdbc.message.DbException;
 import net.unit8.solr.jdbc.message.ErrorCode;
 import net.unit8.solr.jdbc.parser.ConditionParser;
+import org.apache.solr.client.solrj.SolrQuery;
+import org.apache.solr.client.solrj.SolrServerException;
+import org.apache.solr.client.solrj.response.QueryResponse;
+
+import java.io.IOException;
+import java.util.ArrayList;
 
 public class DeleteCommand extends Command {
-	private final Delete delStmt;
+	private transient final Delete delStmt;
 	private ConditionParser conditionParser;
 
     public DeleteCommand(Delete stmt) {

@@ -1,17 +1,11 @@
 package net.unit8.solr.jdbc;
 
-import java.sql.Connection;
-import java.sql.Driver;
-import java.sql.DriverManager;
-import java.sql.DriverPropertyInfo;
-import java.sql.SQLException;
-import java.util.Properties;
-
+import net.unit8.solr.jdbc.message.DbException;
+import net.unit8.solr.jdbc.message.ErrorCode;
 import org.apache.commons.lang.StringUtils;
 
-import net.unit8.solr.jdbc.impl.CommonsHttpConnectionImpl;
-import net.unit8.solr.jdbc.impl.EmbeddedConnectionImpl;
-import net.unit8.solr.jdbc.impl.SolrConnection;
+import java.sql.*;
+import java.util.Properties;
 
 
 /**
@@ -21,6 +15,7 @@ import net.unit8.solr.jdbc.impl.SolrConnection;
  */
 public class SolrDriver implements Driver {
 	private String serverUrl;
+    private static ConnectionTypeDetector connectionTypeDetector = ConnectionTypeDetector.getInstance();
 	
 	static {
 		Driver driver = new SolrDriver();
@@ -46,20 +41,13 @@ public class SolrDriver implements Driver {
 	public Connection connect(String url, Properties properties)
 			throws SQLException {
 		if(!parseUrl(url)) {
-			throw new SQLException("Driver URLが解釈できません");
+			throw DbException.get(ErrorCode.URL_FORMAT_ERROR_2, url).getSQLException();
 		}
-		SolrConnection conn;
-		try {
-			if (serverUrl.startsWith("http://") || serverUrl.startsWith("https://")) {
-				conn = new CommonsHttpConnectionImpl(serverUrl);
-			} else {
-				conn = new EmbeddedConnectionImpl(serverUrl);
-			}
-
-		} catch(Exception e) {
-			throw new SQLException("URLが解釈できません", e);
-		}
-		return conn;
+        try {
+            return  connectionTypeDetector.find(serverUrl);
+        } catch (Exception e) {
+            throw DbException.get(ErrorCode.URL_FORMAT_ERROR_2, serverUrl).getSQLException();
+        }
 	}
 
 	@Override
