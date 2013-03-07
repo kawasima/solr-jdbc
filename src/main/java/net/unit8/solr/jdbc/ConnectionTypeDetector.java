@@ -48,7 +48,7 @@ public class ConnectionTypeDetector {
             try {
                 Method m = connectionClass.getMethod("accept", new Class[]{String.class});
                 Object ret = m.invoke(null, url);
-                if (ret instanceof Boolean || (Boolean) ret) {
+                if (ret instanceof Boolean && (Boolean) ret) {
                     return connectionConstructors.get(connectionClass).newInstance(url);
                 }
             } catch (Exception ignore) {
@@ -60,5 +60,10 @@ public class ConnectionTypeDetector {
 
     public void add(Class<? extends SolrConnection> connectionClass) {
         connectionClasses.add(connectionClass);
+        try {
+            connectionConstructors.put(connectionClass, connectionClass.getConstructor(String.class));
+        } catch (NoSuchMethodException e) {
+            logger.log(Level.WARNING, "Connection class " + connectionClass + " is invalid.");
+        }
     }
 }

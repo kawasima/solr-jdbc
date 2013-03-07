@@ -1,5 +1,6 @@
 package net.unit8.solr.jdbc.impl;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.http.client.HttpClient;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.solr.client.solrj.SolrServer;
@@ -18,8 +19,12 @@ public class CommonsHttpConnectionImpl extends SolrConnection {
 		SolrServer solrServer = new HttpSolrServer(serverUrl, httpClient);
 		setSolrServer(solrServer);
 	}
-	
-	@Override
+
+    public static boolean accept(String url) {
+        return StringUtils.startsWith(url, "http://") || StringUtils.startsWith(url, "http://");
+    }
+
+    @Override
 	public void close() {
 		
 	}

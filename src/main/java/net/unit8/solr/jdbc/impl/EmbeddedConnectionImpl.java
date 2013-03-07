@@ -44,6 +44,10 @@ public class EmbeddedConnectionImpl extends SolrConnection {
 		setSolrServer(solrServer);
 	}
 
+    public static boolean accept(String url) {
+        return true;
+    }
+
 	@Override
 	public void close() {
 		coreContainer.shutdown();

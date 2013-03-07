@@ -44,6 +44,7 @@ public abstract class SolrConnection implements Connection {
 	public void refreshMetaData() {
 		metaData = null;
 	}
+
 	@Override
 	public void clearWarnings() throws SQLException {
 		checkClosed();
