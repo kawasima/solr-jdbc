@@ -46,7 +46,7 @@ public class SolrDriver implements Driver {
         try {
             return  connectionTypeDetector.find(serverUrl);
         } catch (Exception e) {
-            throw DbException.get(ErrorCode.URL_FORMAT_ERROR_2, serverUrl).getSQLException();
+            throw DbException.get(ErrorCode.URL_FORMAT_ERROR_2, e, "jdbc:solr:[url]", serverUrl).getSQLException();
         }
 	}
 

@@ -19,7 +19,7 @@ public class MultiValueTest {
 	public void setUp() throws Exception{
 		Class.forName(SolrDriver.class.getName());
 
-		conn = DriverManager.getConnection("jdbc:solr:s;SOLR_HOME=src/test/resources");
+		conn = DriverManager.getConnection("jdbc:solr:s");
 		PreparedStatement dropStmt = conn.prepareStatement("DROP TABLE books");
 		try {
 			dropStmt.executeUpdate();

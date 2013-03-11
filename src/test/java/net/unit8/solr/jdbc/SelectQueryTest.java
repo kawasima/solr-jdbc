@@ -15,7 +15,7 @@ public class SelectQueryTest {
 
 	@Before
 	public void setUp() throws Exception {
-		conn = DriverManager.getConnection("jdbc:solr:s;SOLR_HOME=src/test/resources");
+		conn = DriverManager.getConnection("jdbc:solr:s");
 	}
 
 	@After

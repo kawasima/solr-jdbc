@@ -16,7 +16,7 @@ public class UpdateExecTest {
 
 	@Before
 	public void setUp() throws Exception {
-		conn = DriverManager.getConnection("jdbc:solr:s;SOLR_HOME=src/test/resources");
+		conn = DriverManager.getConnection("jdbc:solr:s");
 	}
 
 	@After
@@ -162,7 +162,7 @@ public class UpdateExecTest {
 		Class.forName(SolrDriver.class.getName());
 
 		try {
-			setUpConn = DriverManager.getConnection("jdbc:solr:s;SOLR_HOME=src/test/resources");
+			setUpConn = DriverManager.getConnection("jdbc:solr:s");
 			PreparedStatement dropStmt = setUpConn.prepareStatement("DROP TABLE player");
 			try {
 				dropStmt.executeUpdate();

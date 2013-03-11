@@ -52,7 +52,7 @@ public class DbException extends RuntimeException {
 		String message = translate(sqlstate, params);
 		SQLException sqlException = new SQLException(message, sqlstate, errorCode);
         if (cause != null)
-            sqlException.setStackTrace(cause.getStackTrace());
+            sqlException.initCause(cause);
         return sqlException;
 	}
 
