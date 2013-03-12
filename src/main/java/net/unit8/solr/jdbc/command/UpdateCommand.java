@@ -24,7 +24,11 @@ import org.apache.solr.common.SolrInputDocument;
 
 import java.util.*;
 
-
+/**
+ * UPDATE command.
+ *
+ * @author kawasima
+ */
 public class UpdateCommand extends Command {
 	private transient final Update updStmt;
 	private ConditionParser conditionParser;
@@ -50,7 +54,7 @@ public class UpdateCommand extends Command {
 	}
 
 	/**
-	 * SolrにはUpdateがないので、delete and insertする。
+	 * execute update query.
 	 */
 	@Override
 	public int executeUpdate() {
@@ -106,7 +110,7 @@ public class UpdateCommand extends Command {
 		if(!metaData.hasTable(tableName))
 			throw DbException.get(ErrorCode.TABLE_OR_VIEW_NOT_FOUND, tableName);
 
-		// SET句の解析
+		// parse SET clause.
 		setItemList = new ArrayList<Item>();
 		ExpressionParser expressionParser = new ExpressionParser();
 		for(Expression expr : (List<Expression>)updStmt.getExpressions()) {
@@ -124,15 +128,15 @@ public class UpdateCommand extends Command {
 			}
 		}
 
-		// Where句の解析
-		conditionParser = new ConditionParser((DatabaseMetaDataImpl)metaData, parameters);
+		// parse WHERE clause.
+		conditionParser = new ConditionParser(metaData, parameters);
 		conditionParser.setTableName(tableName);
 		updStmt.getWhere().accept(conditionParser);
 		parameters = conditionParser.getParameters();
 
         int columnOrder = 0;
 		for(Column column : (List<Column>)updStmt.getColumns()) {
-			net.unit8.solr.jdbc.expression.Expression solrColumn =((DatabaseMetaDataImpl)metaData).getSolrColumn(tableName, column.getColumnName());
+			net.unit8.solr.jdbc.expression.Expression solrColumn = metaData.getSolrColumn(tableName, column.getColumnName());
 			solrColumnNames.put(solrColumn.getSolrColumnName(), columnOrder++);
 		}
 

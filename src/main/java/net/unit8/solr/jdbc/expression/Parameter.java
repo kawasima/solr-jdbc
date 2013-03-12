@@ -37,8 +37,7 @@ public class Parameter implements Item{
 		if (value != null) {
 			return value.getType();
 		}
-		// FIXME Unknown
-		return SolrType.STRING;
+		return SolrType.UNKNOWN;
 	}
 
 	public String getQueryString() {

@@ -1,22 +1,16 @@
 package net.unit8.solr.jdbc.impl;
 
-import java.io.StringReader;
-import java.sql.BatchUpdateException;
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.SQLWarning;
-import java.sql.Statement;
-import java.util.ArrayList;
-import java.util.List;
-
 import net.sf.jsqlparser.JSQLParserException;
 import net.sf.jsqlparser.parser.CCJSqlParserManager;
-
 import net.unit8.solr.jdbc.command.Command;
 import net.unit8.solr.jdbc.command.CommandFactory;
 import net.unit8.solr.jdbc.message.DbException;
 import net.unit8.solr.jdbc.message.ErrorCode;
+
+import java.io.StringReader;
+import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class StatementImpl implements Statement {
@@ -95,7 +89,7 @@ public class StatementImpl implements Statement {
 		Command command = parseSQL(sql);
 		try {
 			if(command.isQuery()) {
-				resultSet = (AbstractResultSet)command.executeQuery();
+				resultSet = command.executeQuery();
 			} else {
 				updateCount = command.executeUpdate();
 				this.conn.setUpdatedInTx(true);

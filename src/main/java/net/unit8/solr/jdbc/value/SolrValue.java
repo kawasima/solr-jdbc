@@ -1,5 +1,8 @@
 package net.unit8.solr.jdbc.value;
 
+import net.unit8.solr.jdbc.message.DbException;
+import net.unit8.solr.jdbc.message.ErrorCode;
+
 import java.math.BigDecimal;
 import java.sql.Date;
 import java.sql.Timestamp;
@@ -16,15 +19,15 @@ public abstract class SolrValue {
 	public abstract String getQueryString();
 
 	public Boolean getBoolean() {
-		return ((ValueBoolean)convertTo(SolrType.BOOLEAN)).getBoolean();
+		return convertTo(SolrType.BOOLEAN).getBoolean();
 	}
 
 	public Date getDate() {
-		return ((ValueDate)convertTo(SolrType.DATE)).getDate();
+		return convertTo(SolrType.DATE).getDate();
 	}
 
 	public Date getDateNoCopy() {
-		return ((ValueDate)convertTo(SolrType.DATE)).getDateNoCopy();
+		return convertTo(SolrType.DATE).getDateNoCopy();
 	}
 
 	public Timestamp getTimestamp() {
@@ -33,15 +36,15 @@ public abstract class SolrValue {
 	}
 	
 	public BigDecimal getBigDecimal() {
-		return ((ValueDecimal)convertTo(SolrType.DECIMAL)).getBigDecimal();
+		return convertTo(SolrType.DECIMAL).getBigDecimal();
 	}
 
 	public int getInt() {
-		return ((ValueInt) convertTo(SolrType.INT)).getInt();
+		return convertTo(SolrType.INT).getInt();
 	}
 
 	public double getDouble() {
-		return ((ValueDouble) convertTo(SolrType.DOUBLE)).getDouble();
+		return convertTo(SolrType.DOUBLE).getDouble();
 	}
 	
 	public SolrValue convertTo(SolrType targetType) {
@@ -75,8 +78,7 @@ public abstract class SolrValue {
 			return ValueArray.get(new SolrValue[]{ValueString.get(s)});
 		}
 		default:
-			// TODO DbExceptionを使う
-			throw new RuntimeException("データ変換エラー");
+            throw DbException.get(ErrorCode.DATA_CONVERSION_ERROR_1, s);
 		}
 	}
 

@@ -4,15 +4,18 @@ public class ErrorCode {
 	public static final int NO_DATA_AVAILABLE = 2000;
 	public static final int COLUMN_COUNT_DOES_NOT_MATCH = 21002;
 	public static final int NUMERIC_VALUE_OUT_OF_RANGE = 22003;
-	public static final int DUPLICATE_KEY = 23001;
+    public static final int DATA_CONVERSION_ERROR_1 = 22018;
+	public static final int DUPLICATE_KEY_1 = 23505;
+
 	public static final int SYNTAX_ERROR = 42000;
 	public static final int TABLE_OR_VIEW_ALREADY_EXISTS = 42101;
 	public static final int TABLE_OR_VIEW_NOT_FOUND = 42102;
 	public static final int COLUMN_NOT_FOUND = 42122;
-	public static final int GENERAL_ERROR = 50000;
 
+	public static final int GENERAL_ERROR = 50000;
 	public static final int UNKNOWN_DATA_TYPE = 50004;
 	public static final int FEATURE_NOT_SUPPORTED = 50100;
+
 	public static final int METHOD_NOT_ALLOWED_FOR_QUERY = 90001;
 	public static final int METHOD_ONLY_ALLOWED_FOR_QUERY = 90002;
 	public static final int NULL_NOT_ALLOWED = 90006;

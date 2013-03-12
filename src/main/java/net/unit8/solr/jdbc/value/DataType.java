@@ -17,7 +17,6 @@ import java.util.HashMap;
  *
  */
 public class DataType {
-	private static final ArrayList<DataType> TYPES = new ArrayList<DataType>();
 	private static final HashMap<String, DataType> TYPES_BY_NAME = new HashMap<String, DataType>();
 	private static final ArrayList<DataType> TYPES_BY_VALUE_TYPE = new ArrayList<DataType>();
 	public SolrType type;
@@ -53,7 +52,6 @@ public class DataType {
 			if(TYPES_BY_VALUE_TYPE.get(type.ordinal()) == null) {
 				TYPES_BY_VALUE_TYPE.set(type.ordinal(), dt);
 			}
-			TYPES.add(dt);
 		}
 
 	}
@@ -119,7 +117,7 @@ public class DataType {
 			}
 			return ValueArray.get(v);
 		} else {
-			return ValueString.get(x.toString()); // FIXME 知らない型は強制的にStringにする
+			return ValueString.get(x.toString());
 		}
 	}
 

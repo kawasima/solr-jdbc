@@ -1,30 +1,5 @@
 package net.unit8.solr.jdbc.impl;
 
-import java.io.InputStream;
-import java.io.Reader;
-import java.math.BigDecimal;
-import java.net.URL;
-import java.sql.Array;
-import java.sql.Blob;
-import java.sql.Clob;
-import java.sql.Date;
-import java.sql.NClob;
-import java.sql.Ref;
-import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
-import java.sql.RowId;
-import java.sql.SQLException;
-import java.sql.SQLWarning;
-import java.sql.SQLXML;
-import java.sql.Statement;
-import java.sql.Time;
-import java.sql.Timestamp;
-import java.util.Calendar;
-import java.util.Collection;
-import java.util.Map;
-
-import org.apache.solr.common.SolrDocumentList;
-
 import net.unit8.solr.jdbc.expression.Expression;
 import net.unit8.solr.jdbc.message.DbException;
 import net.unit8.solr.jdbc.message.ErrorCode;
@@ -32,6 +7,16 @@ import net.unit8.solr.jdbc.value.DataType;
 import net.unit8.solr.jdbc.value.SolrType;
 import net.unit8.solr.jdbc.value.SolrValue;
 import net.unit8.solr.jdbc.value.ValueNull;
+import org.apache.solr.common.SolrDocumentList;
+
+import java.io.InputStream;
+import java.io.Reader;
+import java.math.BigDecimal;
+import java.net.URL;
+import java.sql.*;
+import java.util.Calendar;
+import java.util.Collection;
+import java.util.Map;
 
 
 public abstract class AbstractResultSet implements ResultSet {
@@ -595,7 +580,7 @@ public abstract class AbstractResultSet implements ResultSet {
 	public Timestamp getTimestamp(int i, Calendar calendar) throws SQLException {
 		checkClosed();
 		checkAvailable();
-		throw DbException.get(ErrorCode.FEATURE_NOT_SUPPORTED, "getTimetamp");
+		throw DbException.get(ErrorCode.FEATURE_NOT_SUPPORTED, "getTimestamp");
 	}
 
 	@Override
