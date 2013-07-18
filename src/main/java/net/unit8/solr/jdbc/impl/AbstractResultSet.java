@@ -11,6 +11,7 @@ import org.apache.solr.common.SolrDocumentList;
 
 import java.io.InputStream;
 import java.io.Reader;
+import java.io.StringReader;
 import java.math.BigDecimal;
 import java.net.URL;
 import java.sql.*;
@@ -268,17 +269,19 @@ public abstract class AbstractResultSet implements ResultSet {
 	}
 
 	@Override
-	public Reader getCharacterStream(int i) throws SQLException {
+	public Reader getCharacterStream(int columnIndex) throws SQLException {
 		checkClosed();
 		checkAvailable();
-		throw DbException.get(ErrorCode.FEATURE_NOT_SUPPORTED, "getCharacterStream");
+        String value = get(columnIndex).getString();
+        return (value == null) ? null : new StringReader(value);
 	}
 
 	@Override
-	public Reader getCharacterStream(String s) throws SQLException {
+	public Reader getCharacterStream(String columnLabel) throws SQLException {
 		checkClosed();
 		checkAvailable();
-		throw DbException.get(ErrorCode.FEATURE_NOT_SUPPORTED, "getCharacterStream");
+        String value = get(columnLabel).getString();
+        return (value == null) ? null : new StringReader(value);
 	}
 
 	@Override
