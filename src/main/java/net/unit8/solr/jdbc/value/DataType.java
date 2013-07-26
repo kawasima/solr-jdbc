@@ -8,6 +8,7 @@ import java.sql.Array;
 import java.sql.Date;
 import java.sql.Types;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 
 /**
@@ -108,6 +109,8 @@ public class DataType {
 			return ValueDecimal.get((BigDecimal)x);
 		} else if (x instanceof Date) {
 			return ValueDate.get((Date)x);
+        } else if (x instanceof java.util.Date) {
+            return ValueDate.get(new java.sql.Date(((java.util.Date) x).getTime()));
 		} else if (x instanceof Object[]) {
 			Object[] o = (Object[]) x;
 			int len = o.length;
