@@ -31,6 +31,7 @@ public class SelectParser implements SelectVisitor, FromItemVisitor, ItemsListVi
 	private final Map<String, String> solrOptions;
 	private final DatabaseMetaDataImpl metaData;
 	private final List<String> selectColumns;
+    /** Expressions of SELECT items */
 	private List<Expression> expressions;
 	private boolean hasGroupBy = false;
 	private SolrQuery solrQuery;
@@ -94,19 +95,19 @@ public class SelectParser implements SelectVisitor, FromItemVisitor, ItemsListVi
 			}
 		}
 
-		// Where句の解析
+		// Parse WHERE clause
 		if (plainSelect.getWhere()!=null) {
 			conditionParser = new ConditionParser(metaData);
 			conditionParser.setTableName(tableName);
 			plainSelect.getWhere().accept(conditionParser);
 		}
 
-		// ORDER BYの解析
+		// Parse ORDER BY clause
 		if (plainSelect.getOrderByElements() != null) {
 			parseOrderBy(plainSelect.getOrderByElements());
 		}
 
-		// GROUP BYの解析
+		// Parse GROUP BY clause
 		List<Column> groupByColumns = plainSelect.getGroupByColumnReferences();
 		if (groupByColumns != null) {
 			parseGroupBy(groupByColumns);
@@ -196,6 +197,19 @@ public class SelectParser implements SelectVisitor, FromItemVisitor, ItemsListVi
 				@Override
 				public void visit(Column col) {
 					Expression solrColumn = metaData.getSolrColumn(tableName, col.getColumnName());
+                    if (solrColumn == null) {
+                        // Try to find the column aliases.
+                        for (Expression selectItemExpression : expressions) {
+                            String alias = selectItemExpression.getAlias();
+                            if (StringUtils.equals(col.getColumnName(), alias)) {
+                                solrColumn = selectItemExpression;
+                                break;
+                            }
+                        }
+                    }
+                    if (solrColumn == null) {
+                        throw DbException.get(ErrorCode.COLUMN_NOT_FOUND, col.getColumnName());
+                    }
 					String order = (orderByElement.isAsc()) ? "asc" : "desc";
 					sortColumns.add(solrColumn.getSolrColumnName() + " " + order);
 				}
