@@ -1,6 +1,8 @@
 package net.unit8.solr.jdbc.value;
 
 
+import org.apache.solr.client.solrj.util.ClientUtils;
+
 public class ValueString extends SolrValue{
 	private static final ValueString EMPTY = new ValueString("");
 	
@@ -17,12 +19,9 @@ public class ValueString extends SolrValue{
 		return new ValueString(s);
 	}
 
-	/**
-	 * TODO エスケープ
-	 */
 	@Override
 	public String getQueryString() {
-		return "\""+value+"\"";
+		return "\"" + ClientUtils.escapeQueryChars(value) + "\"";
 	}
 	
 	@Override

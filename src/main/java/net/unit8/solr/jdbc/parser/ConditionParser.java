@@ -103,7 +103,9 @@ public class ConditionParser implements ExpressionVisitor {
 			String index = matcher.group(1);
 			int paramIndex = Integer.parseInt(index);
 			String paramStr = params.get(paramIndex).getQueryString();
-			matcher.appendReplacement(sb, paramStr);
+
+            // In appendReplacement method, '\' is interpreted for escape sequence.
+            matcher.appendReplacement(sb, StringUtils.replace(paramStr, "\\", "\\\\"));
 		}
 		matcher.appendTail(sb);
 

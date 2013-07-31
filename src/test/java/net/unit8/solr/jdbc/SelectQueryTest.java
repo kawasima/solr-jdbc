@@ -54,7 +54,7 @@ public class SelectQueryTest {
 				expected2);
 	}
 
-	@Test
+    @Test
 	public void testStatementOr() throws SQLException {
 		Object[][] expected1 = {{"ランディーバース"}};
 		Object[] params = {"阪神"};
