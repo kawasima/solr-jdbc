@@ -1,7 +1,5 @@
 package net.unit8.solr.jdbc.expression;
 
-import org.apache.commons.lang.StringUtils;
-
 import net.unit8.solr.jdbc.message.DbException;
 import net.unit8.solr.jdbc.message.ErrorCode;
 import net.unit8.solr.jdbc.value.SolrType;
@@ -50,8 +48,9 @@ public class Parameter implements Item {
                     StringBuilder sb = processWildcard(value.getString());
                     // If the parameter matched partially in the middle,
                     // trim the first & last wildcards for the syntax of proper solr query.
-                    if (sb.charAt(0) == '*' && sb.charAt(sb.length() - 1) == '*') {
-                        sb.deleteCharAt(0);
+                    if (sb.charAt(sb.length() - 1) == '*') {
+                        if (sb.charAt(0) == '*')
+                            sb.deleteCharAt(0);
                         sb.deleteCharAt(sb.length() - 1);
                         return sb.toString();
                     } else {

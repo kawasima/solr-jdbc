@@ -106,7 +106,17 @@ public class SelectQueryTest {
 				expected);
 	}
 
-	@Test
+    @Test
+    public void testStartsForText() throws SQLException {
+        Object[][] expected = {{"高橋慶彦"}};
+        Object[] params = {"走攻守%"};
+        verifyPreparedStatement(
+                "SELECT player_name FROM player WHERE comment like ?",
+                params,
+                expected);
+    }
+
+    @Test
 	public void testBetween() throws SQLException {
 		Object[][] expected = {{"山崎隆造"}, {"衣笠祥雄"}};
 		Object[] params = {2,3};
