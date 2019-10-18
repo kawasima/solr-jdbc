@@ -6,7 +6,7 @@
 	<name>solr-jdbc</name>
 
     <properties>
-        <solrVersion>4.1.0</solrVersion>
+        <solrVersion>8.2.0</solrVersion>
     </properties>
 
 	<distributionManagement>
